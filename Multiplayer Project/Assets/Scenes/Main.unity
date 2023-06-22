@@ -355,9 +355,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba8d11ca416412446b1e106d1bd56bb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
   ping: {fileID: 1614497394}
 --- !u!114 &163605904
 MonoBehaviour:
