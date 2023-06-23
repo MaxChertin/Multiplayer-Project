@@ -8,6 +8,6 @@ public class UIManager : MonoBehaviour
     
     private void OnGUI()
     {
-        ping.text = "ping: " + NetworkTime.rtt + "ms";
+        ping.text = "ping: " + NetworkTime.rtt.ToString("N0") + "ms";
     }
 }
