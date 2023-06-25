@@ -7,27 +7,32 @@ public class CameraMove : NetworkBehaviour
     [SerializeField] private Transform head;
 
     [Header("Mouse Settings")] [SerializeField]
-    private float sens = 300f;
+    private float sens = 0.8f;
 
     private float xRotation;
     private float yRotation;
 
     private void Start()
     {
-        if (!isLocalPlayer) Destroy(this.gameObject);
+        if (!isLocalPlayer)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
         
         // Temporary code for locking the cursor to the screen
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
     
-    void Update() {
-        // Move the camera to the player
-        transform.position = player.transform.position + new Vector3(0, head.transform.localPosition.y, 0);
+    void Update()
+    {
+        // Move the camera to the player to avoid jitteriness
+        transform.position = head.transform.position;
         
         // Look and rotate the camera with the cursor
-        float mouseX = Input.GetAxisRaw("Mouse X") * sens * Time.deltaTime;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * sens * Time.deltaTime;
+        float mouseX = Input.GetAxisRaw("Mouse X") * sens;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * sens;
 
         yRotation += mouseX;
         xRotation -= mouseY;
