@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
@@ -6,7 +7,7 @@ public class ClientPrediction : NetworkBehaviour
 {
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private CharacterController cc;
-    
+
     public struct PlayerInput
     {
         public uint timestamp;
@@ -47,6 +48,9 @@ public class ClientPrediction : NetworkBehaviour
 
     private void FixedUpdate() // TODO potentially take input in the update and movement in the fixedUpdate
     {
+        // For now, disable client prediction and reconciliation. well try and get that later :(
+        
+        /*
         if (isLocalPlayer)
         {
             // Get input from the client
@@ -72,7 +76,7 @@ public class ClientPrediction : NetworkBehaviour
         SyncState();
         // Syncing between client and server state
         //SyncState();
-        
+        */
     }
 
     // Call calculateMovement ONLY from server.

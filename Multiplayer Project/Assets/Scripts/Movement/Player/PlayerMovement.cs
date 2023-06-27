@@ -15,6 +15,7 @@ public class PlayerMovement : NetworkBehaviour
 
     private Vector3 velocity;
     private float x, z;
+    private bool isJumping;
     private bool grounded;
 
     // Based on our input and our previous state, calculate the new state
@@ -47,5 +48,38 @@ public class PlayerMovement : NetworkBehaviour
             usedInput = playerInput,
             position = controller.transform.position// + previousState.position,
         };
+    }
+
+    private void Update()
+    {
+        if (!isLocalPlayer) return;
+        
+        x = Input.GetAxisRaw("Horizontal");
+        z = Input.GetAxisRaw("Vertical");
+        isJumping = Input.GetButton("Jump");
+        
+        CalculateMovement();
+    }
+
+    private void CalculateMovement()
+    {
+        // Jumping
+        grounded = Physics.CheckSphere(groundCheck.position, groundDistance, whatIsGround);
+        if (grounded && velocity.y < 0)
+        {
+            velocity.y = -2f;
+        }
+        if (isJumping && grounded)
+        {
+            velocity.y = Mathf.Sqrt(-2f * gravity);
+        }
+        
+        // Basic movement
+        Vector3 moveDir = transform.right * x + transform.forward * z;
+        controller.Move(Time.deltaTime * speed * moveDir);
+        
+        // Gravity movement
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
     }
 }
