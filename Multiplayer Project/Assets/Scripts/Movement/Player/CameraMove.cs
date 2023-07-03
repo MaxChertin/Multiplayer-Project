@@ -4,7 +4,6 @@ using UnityEngine;
 public class CameraMove : NetworkBehaviour
 {
     [SerializeField] private Transform player;
-    [SerializeField] private Transform head;
 
     [Header("Mouse Settings")] [SerializeField]
     private float sens = 0.8f;
@@ -27,8 +26,8 @@ public class CameraMove : NetworkBehaviour
     
     void Update()
     {
-        // Move the camera to the player to avoid jitteriness
-        transform.position = head.transform.position;
+        // Move the camera to the player camera bone to avoid jitteriness
+        // transform.position = cameraBone.transform.position;
         
         // Look and rotate the camera with the cursor
         float mouseX = Input.GetAxisRaw("Mouse X") * sens;

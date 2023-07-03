@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Steamworks;
 using Mirror;
-using Unity.Mathematics;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-manager
@@ -35,26 +35,4 @@ public class CustomNetworkManager : NetworkManager
         QualitySettings.vSyncCount = 0;
         #endif
     }
-
-    public override void OnServerAddPlayer(NetworkConnectionToClient conn)
-    {
-        if (conn.identity == null)
-        {
-            GameObject player;
-            
-            if (conn.isReady) // local player
-            {
-                player = Instantiate(spawnPrefabs.Find(prefab => prefab.name == "FP_arms"));
-            }
-            else
-            {
-                player = Instantiate(spawnPrefabs.Find(prefab => prefab.name == "Player"));
-            }
-
-            // instantiating a "Player" prefab gives it the name "Player(clone)"
-            // => appending the connectionId is WAY more useful for debugging!
-            player.name = $"{player.name} [connId={conn.connectionId}]";
-            NetworkServer.AddPlayerForConnection(conn, player);
-        }
-    } 
 }
