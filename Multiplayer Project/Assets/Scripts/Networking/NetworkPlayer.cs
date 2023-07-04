@@ -10,14 +10,9 @@ public class NetworkPlayer : NetworkBehaviour
     private void Start()
     {
         if (isLocalPlayer)
-            //Destroy(playerPrefab);
             playerPrefab.SetActive(false);
-        else
-        {
-            //Destroy(localCamera);
-            //Destroy(localPlayerPrefab);
+        else 
             localPlayerPrefab.SetActive(false);
-        }
 
         Destroy(this);
     }

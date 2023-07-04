@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SteamManager : MonoBehaviour
 {
+    // Steam Manger is down for now as it is not necessary to keep initializing steam every time.
+    
     private void Awake()
     {
         try
