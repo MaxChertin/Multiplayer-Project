@@ -33,6 +33,7 @@ public class CustomNetworkManager : NetworkManager
         #if UNITY_SERVER
         Application.targetFrameRate = 64;
         QualitySettings.vSyncCount = 0;
+        Debug.Log("")
         #endif
     }
 }
