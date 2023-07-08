@@ -342,6 +342,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 780577398583841745}
     - target: {fileID: 3395917368898910820, guid: edf5d01ae2156794ba3186153b80a4a3, type: 3}
+      propertyPath: animationLerpTime
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395917368898910820, guid: edf5d01ae2156794ba3186153b80a4a3, type: 3}
       propertyPath: CHARACTER_animator
       value: 
       objectReference: {fileID: 589295800022351063}

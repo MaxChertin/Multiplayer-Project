@@ -9,6 +9,9 @@ public class PlayerAnimationManager : MonoBehaviour
     // Reference to input sys
     [SerializeField] private PlayerInput input;
     
+    [Header("Values")]
+    [SerializeField] [Range(0, 0.2f)] private float animationDampTime = .08f;
+    
     private float x, z;
     private bool isJumping;
     private bool isRunning;
@@ -19,6 +22,8 @@ public class PlayerAnimationManager : MonoBehaviour
     private int MOVEMENT_INDEX => Animator.StringToHash("moveIndex");
     private int NETPLAYER_MovX => Animator.StringToHash("MovX");
     private int NETPLAYER_MovZ => Animator.StringToHash("MovZ");
+    private int NETPLAYER_JUMPING => Animator.StringToHash("isJumping");
+    private int NETPLAYER_GROUNDED => Animator.StringToHash("isGrounded");
     // Ints
     const int MOVEMENT_NO_MOVEMENT = 0; 
     const int MOVEMENT_WALK = 1; 
@@ -53,9 +58,12 @@ public class PlayerAnimationManager : MonoBehaviour
     {
         if (isGrounded)
         {
-            CHARACTER_animator.SetFloat(NETPLAYER_MovX, isRunning ? x * 2f : x);
-            CHARACTER_animator.SetFloat(NETPLAYER_MovZ, isRunning ? z * 2f : z);
+            CHARACTER_animator.SetFloat(NETPLAYER_MovX, isRunning ? x * 2f : x, animationDampTime, Time.deltaTime);
+            CHARACTER_animator.SetFloat(NETPLAYER_MovZ, isRunning ? z * 2f : z, animationDampTime, Time.deltaTime);
         }
+        
+        CHARACTER_animator.SetBool(NETPLAYER_JUMPING, isJumping);
+        CHARACTER_animator.SetBool(NETPLAYER_GROUNDED, isGrounded);
     }
 
     public void FootStepSoundLocalEvent()
