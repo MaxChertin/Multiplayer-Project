@@ -194,7 +194,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 61466753}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96b149f511061407fb54895c057b7736, type: 3}
   m_Name: 
@@ -239,11 +239,11 @@ MonoBehaviour:
   sendRate: 64
   offlineScene: 
   onlineScene: 
-  transport: {fileID: 61466760}
+  transport: {fileID: 61466756}
   networkAddress: localhost
   maxConnections: 100
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 6933372740435463389, guid: 4f8946c49f29cd14cb9918026ec84d0c, type: 3}
+  playerPrefab: {fileID: 4837493998065229021, guid: 4f8946c49f29cd14cb9918026ec84d0c, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs: []
