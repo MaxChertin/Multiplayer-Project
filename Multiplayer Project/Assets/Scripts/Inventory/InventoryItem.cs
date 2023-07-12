@@ -1,7 +1,6 @@
-using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -9,12 +8,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [HideInInspector] public uint count;
     
     //refrences to UI
-    [SerializeField] private Image image;
+    [SerializeField] Image image;
 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        //item.icon;
+        //image = item.
     }
 
     public void OnDrag(PointerEventData eventData)
