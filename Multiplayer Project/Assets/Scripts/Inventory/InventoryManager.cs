@@ -6,6 +6,8 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance; 
     public Dictionary<InventoryItem, Item> inventory = new Dictionary<InventoryItem, Item>();
 
+    // TODO Switch inventory system to be server authoritative
+    
     private void Awake()
     {
         if (Instance == null)
