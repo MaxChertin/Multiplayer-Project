@@ -6,11 +6,13 @@ using TMPro;
 
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    [Header("Base Item")]
     /* [HideInInspector] */ public Item item;
     /* [HideInInspector] */ public uint count;
     [HideInInspector] public Transform parentSlot;
 
     //refrences to UI
+    [Header("UI")]
     [SerializeField] private Image image;
     [SerializeField] private TextMeshProUGUI countTxt;
 
@@ -47,5 +49,5 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         UpdateTxtCount();
     }
     
-    private void UpdateTxtCount () => countTxt.text = count != 1 ? "x" + count.ToString("N0") : string.Empty;
+    public void UpdateTxtCount () => countTxt.text = count != 1 ? "x" + count.ToString("N0") : string.Empty;
 }

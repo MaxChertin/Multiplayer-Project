@@ -6,6 +6,8 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance; 
     public List<InventorySlot> inventory = new List<InventorySlot>();
 
+    private const ushort maxItemStack = 2500;
+    
     [SerializeField] private InventoryItem inventoryItemPrefab;
     [SerializeField] private Item itemTest;
     // TODO Switch inventory system to be server authoritative
@@ -20,30 +22,53 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItem(Item item)
     {
+        uint amount = 20000;
         bool assignedEmpty = false;
-        InventorySlot firstEmptySlot;
-        InventorySlot firstSlot;
+        InventorySlot firstEmptySlot = null;
         
         for (ushort iSlot = 0; iSlot < inventory.Count; iSlot++)
         {
-            // First check if there is any item that is the same in the inventory (if yes, check that its not stacked)
-            // If the item is stacked, find the second item with the same id (if there is one) and add it there
-            // If it is stacked, repeat the proccess.
-            // If didnt find any same item (either there isn't any or there is but they are all stacked), find the first slot that is not occupied by any item and add the item there.
-            
-            if (!assignedEmpty && !inventory[iSlot].HasItemInSlot())
+            // For every slot in inventory try to get the inventory item
+            var iInvItem = inventory[iSlot].GetComponentInChildren<InventoryItem>();
+
+            if (iInvItem != null && iInvItem.item.id == item.id)
             {
-                firstEmptySlot = inventory[iSlot];
-                assignedEmpty = true;
-            }
+                if (iInvItem.count + amount > maxItemStack)
+                {
+                    amount = iInvItem.count + amount - maxItemStack;
+                    iInvItem.count = maxItemStack;
+                }
+
+                else
+                {
+                    iInvItem.count += amount;
+                    iInvItem.UpdateTxtCount();
+                    return;
+                }
                 
-            if (!inventory[iSlot].HasItemInSlot())
-            {
-                
+                iInvItem.UpdateTxtCount();
             }
         }
-        // InventoryItem _invItem = Instantiate(inventoryItemPrefab, Vector3.zero, Quaternion.identity, inventory[iSlot].transform);
-        // _invItem.item = itemTest;
-        // return;
+
+        // Looping for empty slots and adding item(s) 
+        for (ushort iSlot = 0; iSlot < inventory.Count; iSlot++)
+        {
+            var iInvItem = inventory[iSlot].GetComponentInChildren<InventoryItem>();
+            if (iInvItem == null)
+            {
+                InventoryItem newInvItem = Instantiate(inventoryItemPrefab, Vector3.zero, Quaternion.identity, inventory[iSlot].transform);
+                newInvItem.item = item;
+                
+                if (amount <= maxItemStack) 
+                {
+                    newInvItem.count = amount;
+                    newInvItem.UpdateTxtCount();
+                    return;
+                }
+                newInvItem.count = maxItemStack;
+                amount -= maxItemStack;
+                newInvItem.UpdateTxtCount();
+            }
+        }
     }
 }
