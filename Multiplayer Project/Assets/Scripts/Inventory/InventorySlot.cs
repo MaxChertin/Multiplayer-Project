@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,26 +11,19 @@ public class InventorySlot : MonoBehaviour, IDropHandler
         
         var currentSlotInvItem = GetComponentInChildren<InventoryItem>();
         var droppedInvItem = data.pointerDrag.GetComponent<InventoryItem>();
-        
-        CombineItems(currentSlotInvItem, droppedInvItem);
-        droppedInvItem.parentSlot = transform;
-    }
 
-    public void CombineItems()
-    {
-        if (transform.childCount > 1)
+        if (CombineItems(droppedInvItem, currentSlotInvItem))
         {
-            foreach (InventoryItem invItem in GetComponentsInChildren<InventoryItem>())
-            {
-                //if (invItem)
-            }
+            droppedInvItem.parentSlot = transform;
         }
     }
 
-    public void CombineItems(InventoryItem currentSlotInvItem, InventoryItem droppedInvItem)
+    public bool CombineItems(InventoryItem droppedInvItem, InventoryItem currentSlotInvItem = null)
     {
+        if (currentSlotInvItem == null) currentSlotInvItem = GetComponentInChildren<InventoryItem>();
         if (transform.childCount != 0)
         {
+            if (currentSlotInvItem.count + droppedInvItem.count > InventoryManager.maxItemStack) return false;
             if (currentSlotInvItem.item.id == droppedInvItem.item.id)
             {
                 Destroy(currentSlotInvItem.gameObject);
@@ -38,6 +32,18 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             
             // TODO Handle other conditions 
         }
+
+        return true;
+    }
+
+    private void OnTransformChildrenChanged()
+    {
+        Debug.Log($"child change, child count: {transform.childCount}. SLOT: {transform.name}");
+        //if (transform.childCount == 2)
+        //{
+        //    InventoryItem[] children = GetComponentsInChildren<InventoryItem>();
+        //    CombineItems(children[0], children[1]);
+        //}
     }
 
     public bool HasItemInSlot () => transform.childCount != 0;

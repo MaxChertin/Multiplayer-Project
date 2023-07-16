@@ -4,12 +4,13 @@ using UnityEngine;
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance; 
+    [Header("Inventory")]
     public List<InventorySlot> inventory = new List<InventorySlot>();
 
-    private const ushort maxItemStack = 2500;
+    public const ushort maxItemStack = 2500;
     
+    [Header("Prefabs")]
     [SerializeField] private InventoryItem inventoryItemPrefab;
-    [SerializeField] private Item itemTest;
     // TODO Switch inventory system to be server authoritative
     
     private void Awake()
@@ -22,10 +23,8 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItem(Item item)
     {
-        uint amount = 20000;
-        bool assignedEmpty = false;
-        InventorySlot firstEmptySlot = null;
-        
+        uint amount = 354;
+
         for (ushort iSlot = 0; iSlot < inventory.Count; iSlot++)
         {
             // For every slot in inventory try to get the inventory item
@@ -70,5 +69,15 @@ public class InventoryManager : MonoBehaviour
                 newInvItem.UpdateTxtCount();
             }
         }
+    }
+
+    public uint SplitItems(InventoryItem inventoryItem)
+    {
+        InventorySlot invSlot = inventoryItem.parentSlot.GetComponent<InventorySlot>();
+        InventoryItem newInvItem = Instantiate(inventoryItemPrefab, Vector3.zero, Quaternion.identity, invSlot.transform);
+        newInvItem.item = inventoryItem.item;
+        
+        newInvItem.count = inventoryItem.count / 2u;
+        return inventoryItem.count % 2 == 0 ? inventoryItem.count / 2u : inventoryItem.count / 2u + 1;
     }
 }
