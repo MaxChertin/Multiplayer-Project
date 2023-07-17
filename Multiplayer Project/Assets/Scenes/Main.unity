@@ -252,7 +252,7 @@ GameObject:
   - component: {fileID: 45191234}
   m_Layer: 5
   m_Name: Inventory
-  m_TagString: Untagged
+  m_TagString: Inventory/Inventory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -309,8 +309,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 36.76888, y: -91.626755}
-  m_SizeDelta: {x: 599.538, y: 426.2535}
+  m_AnchoredPosition: {x: 36.769, y: -91.626755}
+  m_SizeDelta: {x: 599.54, y: 426.2535}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &45191234
 MonoBehaviour:
@@ -4072,6 +4072,10 @@ PrefabInstance:
       propertyPath: count
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9168196748045890564, guid: 5656330080e62ec4582873a7f6205257, type: 3}
+      propertyPath: interactable
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5169,6 +5173,10 @@ PrefabInstance:
       propertyPath: count
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 9168196748045890564, guid: 5656330080e62ec4582873a7f6205257, type: 3}
+      propertyPath: interactable
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6026,7 +6034,7 @@ GameObject:
   - component: {fileID: 1955697733}
   m_Layer: 5
   m_Name: Toolbar
-  m_TagString: Untagged
+  m_TagString: Inventory/Toolbar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

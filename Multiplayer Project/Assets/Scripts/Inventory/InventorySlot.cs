@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
-public class InventorySlot : MonoBehaviour, IDropHandler
+public class InventorySlot : MonoBehaviour, IDropHandler, IPointerClickHandler, IDragHandler, IPointerEnterHandler
 {
     public void OnDrop(PointerEventData data)
     {
@@ -11,6 +12,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
         
         var currentSlotInvItem = GetComponentInChildren<InventoryItem>();
         var droppedInvItem = data.pointerDrag.GetComponent<InventoryItem>();
+        if (droppedInvItem == null || !droppedInvItem.interactable) return;
 
         if (CombineItems(droppedInvItem, currentSlotInvItem))
         {
@@ -32,19 +34,43 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             
             // TODO Handle other conditions 
         }
-
+        
         return true;
     }
-
-    private void OnTransformChildrenChanged()
+    
+    public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log($"child change, child count: {transform.childCount}. SLOT: {transform.name}");
-        //if (transform.childCount == 2)
-        //{
-        //    InventoryItem[] children = GetComponentsInChildren<InventoryItem>();
-        //    CombineItems(children[0], children[1]);
-        //}
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            QuickHop(eventData);
+        }
     }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            QuickHop(eventData);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftShift))
+        {
+            QuickHop(eventData);
+        }
+    }
+    
+    public void QuickHop(PointerEventData eventData)
+    {
+        InventoryItem invItem = GetComponentInChildren<InventoryItem>();
+        if (invItem == null || !invItem.interactable) return;
+        invItem.interactable = false;
+        print ("not interactable anymore!");
+        InventoryManager.Instance.QuickHop(invItem);
+    }
+
 
     public bool HasItemInSlot () => transform.childCount != 0;
 }

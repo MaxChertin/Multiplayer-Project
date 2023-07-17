@@ -191,6 +191,7 @@ MonoBehaviour:
   parentSlot: {fileID: 0}
   image: {fileID: 8792819848690118642}
   countTxt: {fileID: 3614976457690265128}
+  interactable: 1
 --- !u!1 &6564541087111220192
 GameObject:
   m_ObjectHideFlags: 0

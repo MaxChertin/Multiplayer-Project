@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -21,10 +22,8 @@ public class InventoryManager : MonoBehaviour
             Destroy(this);
     }
 
-    public void AddItem(Item item)
+    public void AddItem(Item item, uint amount)
     {
-        uint amount = 354;
-
         for (ushort iSlot = 0; iSlot < inventory.Count; iSlot++)
         {
             // For every slot in inventory try to get the inventory item
@@ -69,6 +68,78 @@ public class InventoryManager : MonoBehaviour
                 newInvItem.UpdateTxtCount();
             }
         }
+    }
+
+    public void RemoveItem(Item item, uint count)
+    {
+        for (ushort iSlot = 0; iSlot < inventory.Count; iSlot++)
+        {
+            var iInvItem = inventory[iSlot].GetComponentInChildren<InventoryItem>();
+            if (iInvItem != null && iInvItem.item.id == item.id)
+            {
+                if (iInvItem.count - count >= 0)
+                {
+                    iInvItem.count -= count; //+ count=0
+                    iInvItem.UpdateTxtCount();
+                    return;
+                }
+                
+                count -= iInvItem.count;
+                Destroy(iInvItem.gameObject);
+            }
+        }
+    }
+    
+    // Quick Hop (left mouse click + shift on slot)
+    // TODO if there is items that are the same then add them together -> potentialy instantiate new items + add time delay + [later] animation
+    // TODO add implementation for quick-hopping for other inventory when available.
+    public void QuickHop(InventoryItem invItem)
+    {
+        GameObject storeTypeObj = invItem.GetComponentInParent<GridLayoutGroup>().gameObject;
+        if (storeTypeObj.CompareTag("Inventory/Toolbar"))
+        {
+            for (ushort iSlot = 0; iSlot < inventory.Count; iSlot++)
+            {
+                var iInvSlot = inventory[iSlot].GetComponent<InventorySlot>();
+                
+                if (iInvSlot.HasItemInSlot())
+                {
+                    var iItemSlot = inventory[iSlot].GetComponentInChildren<InventoryItem>();
+                    if (iItemSlot.count + invItem.count <= maxItemStack) // Normal operation
+                    {
+                        iItemSlot.count += invItem.count;
+                        Destroy(invItem.gameObject);
+                        return;
+                    }
+                    else // current slot has to be filled and then if needed instatiated
+                    {
+                        
+                    }
+                }
+
+                if (!iInvSlot.HasItemInSlot())
+                {
+                    invItem.transform.SetParent(iInvSlot.transform);
+                    invItem.transform.localPosition = Vector3.zero;
+                    break;
+                }
+            }
+        }
+        else if (storeTypeObj.CompareTag("Inventory/Inventory"))
+        {
+            for (ushort iSlot = (ushort) (inventory.Count - 1); iSlot >= 0; iSlot--)
+            {
+                var iInvSlot = inventory[iSlot].GetComponent<InventorySlot>();
+                if (!iInvSlot.HasItemInSlot())
+                {
+                    invItem.transform.SetParent(iInvSlot.transform);
+                    invItem.transform.localPosition = Vector3.zero;
+                    break;
+                }
+            }
+        }
+
+        invItem.interactable = true;
     }
 
     public uint SplitItems(InventoryItem inventoryItem)
