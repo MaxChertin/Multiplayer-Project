@@ -65,9 +65,8 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     public void QuickHop(PointerEventData eventData)
     {
         InventoryItem invItem = GetComponentInChildren<InventoryItem>();
-        if (invItem == null || !invItem.interactable) return;
+        if (invItem == null || !invItem.interactable || Input.GetMouseButton(1)) return;
         invItem.interactable = false;
-        print ("not interactable anymore!");
         InventoryManager.Instance.QuickHop(invItem);
     }
 

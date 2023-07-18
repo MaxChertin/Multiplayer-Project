@@ -58,7 +58,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if (!interactable || Input.GetKey(KeyCode.LeftShift)) return;
         
-        // BUG: While seperating Items, when dragged item will be dropped not a slot two of the separeted items will be stacked on top of each other, without combining them.
+        // BUG: While seperating Items, when dragged item will be dropped outside a slot, two of the separeted items will be stacked on top of each other, without combining them.
         
         transform.SetParent(parentSlot);
         transform.localPosition = Vector3.zero;

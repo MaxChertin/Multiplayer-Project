@@ -13,6 +13,7 @@ public class InventoryManager : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private InventoryItem inventoryItemPrefab;
     // TODO Switch inventory system to be server authoritative
+    // TODO Optimize the fuck out of this class (!!!!)
     
     private void Awake()
     {
@@ -28,7 +29,7 @@ public class InventoryManager : MonoBehaviour
         {
             // For every slot in inventory try to get the inventory item
             var iInvItem = inventory[iSlot].GetComponentInChildren<InventoryItem>();
-
+            
             if (iInvItem != null && iInvItem.item.id == item.id)
             {
                 if (iInvItem.count + amount > maxItemStack)
@@ -57,7 +58,55 @@ public class InventoryManager : MonoBehaviour
                 InventoryItem newInvItem = Instantiate(inventoryItemPrefab, Vector3.zero, Quaternion.identity, inventory[iSlot].transform);
                 newInvItem.item = item;
                 
-                if (amount <= maxItemStack) 
+                if (amount <= maxItemStack)
+                {
+                    newInvItem.count = amount;
+                    newInvItem.UpdateTxtCount();
+                    return;
+                }
+                newInvItem.count = maxItemStack;
+                amount -= maxItemStack;
+                newInvItem.UpdateTxtCount();
+            }
+        }
+    }
+
+    private void AddItemReverse(Item item, uint amount)
+    {
+        for (ushort iSlot = (ushort) (inventory.Count - 1); iSlot > 0; iSlot--)
+        {
+            // For every slot in inventory try to get the inventory item
+            var iInvItem = inventory[iSlot].GetComponentInChildren<InventoryItem>();
+            
+            if (iInvItem != null && iInvItem.item.id == item.id)
+            {
+                if (iInvItem.count + amount > maxItemStack)
+                {
+                    amount = iInvItem.count + amount - maxItemStack;
+                    iInvItem.count = maxItemStack;
+                }
+
+                else
+                {
+                    iInvItem.count += amount;
+                    iInvItem.UpdateTxtCount();
+                    return;
+                }
+                
+                iInvItem.UpdateTxtCount();
+            }
+        }
+
+        // Looping for empty slots and adding item(s) 
+        for (ushort iSlot = (ushort) (inventory.Count - 1); iSlot > 0; iSlot--)
+        {
+            var iInvItem = inventory[iSlot].GetComponentInChildren<InventoryItem>();
+            if (iInvItem == null)
+            {
+                InventoryItem newInvItem = Instantiate(inventoryItemPrefab, Vector3.zero, Quaternion.identity, inventory[iSlot].transform);
+                newInvItem.item = item;
+                
+                if (amount <= maxItemStack)
                 {
                     newInvItem.count = amount;
                     newInvItem.UpdateTxtCount();
@@ -93,50 +142,23 @@ public class InventoryManager : MonoBehaviour
     // Quick Hop (left mouse click + shift on slot)
     // TODO if there is items that are the same then add them together -> potentialy instantiate new items + add time delay + [later] animation
     // TODO add implementation for quick-hopping for other inventory when available.
+
     public void QuickHop(InventoryItem invItem)
     {
         GameObject storeTypeObj = invItem.GetComponentInParent<GridLayoutGroup>().gameObject;
         if (storeTypeObj.CompareTag("Inventory/Toolbar"))
-        {
-            for (ushort iSlot = 0; iSlot < inventory.Count; iSlot++)
-            {
-                var iInvSlot = inventory[iSlot].GetComponent<InventorySlot>();
-                
-                if (iInvSlot.HasItemInSlot())
-                {
-                    var iItemSlot = inventory[iSlot].GetComponentInChildren<InventoryItem>();
-                    if (iItemSlot.count + invItem.count <= maxItemStack) // Normal operation
-                    {
-                        iItemSlot.count += invItem.count;
-                        Destroy(invItem.gameObject);
-                        return;
-                    }
-                    else // current slot has to be filled and then if needed instatiated
-                    {
-                        
-                    }
-                }
-
-                if (!iInvSlot.HasItemInSlot())
-                {
-                    invItem.transform.SetParent(iInvSlot.transform);
-                    invItem.transform.localPosition = Vector3.zero;
-                    break;
-                }
-            }
+        { 
+            invItem.transform.SetParent(transform.root);
+            Destroy(invItem.gameObject);
+            
+            AddItem(invItem.item, invItem.count);
         }
         else if (storeTypeObj.CompareTag("Inventory/Inventory"))
         {
-            for (ushort iSlot = (ushort) (inventory.Count - 1); iSlot >= 0; iSlot--)
-            {
-                var iInvSlot = inventory[iSlot].GetComponent<InventorySlot>();
-                if (!iInvSlot.HasItemInSlot())
-                {
-                    invItem.transform.SetParent(iInvSlot.transform);
-                    invItem.transform.localPosition = Vector3.zero;
-                    break;
-                }
-            }
+            invItem.transform.SetParent(transform.root);
+            Destroy(invItem.gameObject);
+            
+            AddItemReverse(invItem.item, invItem.count);
         }
 
         invItem.interactable = true;
