@@ -140,7 +140,7 @@ public class InventoryManager : MonoBehaviour
     }
     
     // Quick Hop (left mouse click + shift on slot)
-    // TODO if there is items that are the same then add them together -> potentialy instantiate new items + add time delay + [later] animation
+    // TODO add time delay + [later] animation
     // TODO add implementation for quick-hopping for other inventory when available.
 
     public void QuickHop(InventoryItem invItem)
@@ -172,5 +172,15 @@ public class InventoryManager : MonoBehaviour
         
         newInvItem.count = inventoryItem.count / 2u;
         return inventoryItem.count % 2 == 0 ? inventoryItem.count / 2u : inventoryItem.count / 2u + 1;
+    }
+
+    public uint SingleSplitItem(InventoryItem inventoryItem)
+    {
+        InventorySlot invSlot = inventoryItem.parentSlot.GetComponent<InventorySlot>();
+        InventoryItem newInvItem = Instantiate(inventoryItemPrefab, Vector3.zero, Quaternion.identity, invSlot.transform);
+        newInvItem.item = inventoryItem.item;
+
+        newInvItem.count = inventoryItem.count - 1;
+        return 1;
     }
 }

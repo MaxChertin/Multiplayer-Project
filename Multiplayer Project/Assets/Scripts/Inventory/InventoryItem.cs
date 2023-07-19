@@ -10,16 +10,15 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     /* [HideInInspector] */ public Item item;
     /* [HideInInspector] */ public uint count;
     [HideInInspector] public Transform parentSlot;
+    [HideInInspector] public bool interactable = true;
 
     //refrences to UI
     [Header("UI")]
     [SerializeField] private Image image;
     [SerializeField] private TextMeshProUGUI countTxt;
-    public bool interactable = true;
 
 
     // Start method temporary only. for testing purposes only. TODO delete when done testing
-    // TODO replace logic dragging -> clicking [?]
     private void Start () => OnInitializeItem();
 
     private void OnInitializeItem()
@@ -42,6 +41,8 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (!interactable) return;
         if (eventData.button == PointerEventData.InputButton.Right && count != 1)
             count = InventoryManager.Instance.SplitItems(this);
+        if (eventData.button == PointerEventData.InputButton.Middle && count != 1)
+            count = InventoryManager.Instance.SingleSplitItem(this);
         UpdateTxtCount();
         parentSlot = transform.parent;
         image.raycastTarget = false;
@@ -62,6 +63,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         
         transform.SetParent(parentSlot);
         transform.localPosition = Vector3.zero;
+        transform.localScale = new Vector3(1, 1, 1);
         image.raycastTarget = true;
         UpdateTxtCount();
     }
