@@ -25,7 +25,15 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         if (currentSlotInvItem == null) currentSlotInvItem = GetComponentInChildren<InventoryItem>();
         if (transform.childCount != 0)
         {
-            if (currentSlotInvItem.count + droppedInvItem.count > InventoryManager.maxItemStack || currentSlotInvItem.item.id != droppedInvItem.item.id) return false;
+            if (currentSlotInvItem.item.id != droppedInvItem.item.id || currentSlotInvItem.count == InventoryManager.maxItemStack) return false;
+            if (currentSlotInvItem.count + droppedInvItem.count > InventoryManager.maxItemStack)
+            {
+                droppedInvItem.count -= InventoryManager.maxItemStack - currentSlotInvItem.count;
+                currentSlotInvItem.count = InventoryManager.maxItemStack;
+                droppedInvItem.UpdateTxtCount(); currentSlotInvItem.UpdateTxtCount();
+                // Return false as we do not want to parent the dropped item to the current slot.
+                return false;
+            }
             if (currentSlotInvItem.item.id == droppedInvItem.item.id)
             {
                 Destroy(currentSlotInvItem.gameObject);

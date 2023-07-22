@@ -43,6 +43,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             count = InventoryManager.Instance.SplitItems(this);
         if (eventData.button == PointerEventData.InputButton.Middle && count != 1)
             count = InventoryManager.Instance.SingleSplitItem(this);
+        
         UpdateTxtCount();
         parentSlot = transform.parent;
         image.raycastTarget = false;
