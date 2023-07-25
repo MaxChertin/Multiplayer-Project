@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,9 @@ public class InventoryManager : MonoBehaviour
     
     [Header("Prefabs")]
     [SerializeField] private InventoryItem inventoryItemPrefab;
+    [SerializeField] private GameObject inventoryGameObject;
+    [SerializeField] private Image backgrndImage;
+    [SerializeField] private Color backgrndColor;
     // TODO Switch inventory system to be server authoritative
     // TODO Optimize the fuck out of this class (!!!!)
     
@@ -21,6 +25,17 @@ public class InventoryManager : MonoBehaviour
             Instance = this;
         else if (Instance != this)
             Destroy(this);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            backgrndImage.color = backgrndImage.color == new Color(0,0,0,0) ? backgrndColor : new Color(0,0,0,0);
+            inventoryGameObject.SetActive(!inventoryGameObject.activeSelf);
+            Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = !Cursor.visible;
+        }
     }
 
     public void AddItem(Item item, uint amount)

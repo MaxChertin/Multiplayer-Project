@@ -28,7 +28,9 @@ public class CameraMove : NetworkBehaviour
     {
         // Move the camera to the player camera bone to avoid jitteriness
         // transform.position = cameraBone.transform.position;
-        
+
+        if (Cursor.lockState == CursorLockMode.None) return;
+
         // Look and rotate the camera with the cursor
         float mouseX = Input.GetAxisRaw("Mouse X") * sens;
         float mouseY = Input.GetAxisRaw("Mouse Y") * sens;
